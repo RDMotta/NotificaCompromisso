@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_today"
+            android:icon="@android:drawable/ic_menu_day"
+            android:title="@string/txt_hoje"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_refresh"
+            android:icon="@android:drawable/ic_popup_sync"
+            android:title="@string/txt_atualizar"
+            app:showAsAction="never"/>
+    </group>
+
+    <item android:title="Conectividade">
+        <menu>
+            <item
+                android:id="@+id/action_preferences"
+                android:icon="@android:drawable/ic_menu_preferences"
+                android:title="@string/txt_configurar"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+</menu>

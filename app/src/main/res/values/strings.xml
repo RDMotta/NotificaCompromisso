@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Notifica Compromisso</string>
+    <string name="title_activity_main">Notifica Compromisso</string>
+    <string name="title_activiy_preferencias">Configurações e preferências</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="confirm_acion">Confirmado seu compromisso!</string>
+    <string name="confirm_txt">Confirmar</string>
+    <string name="cancel_txt">Cancelar</string>
+
+    <string name="action_bind_service">com.rdm.services.ACTION_BIND_SERVICE</string>
+    <string name="id_notification_value">id_notification_value</string>
+    <string name="action_notification_confirm">action_notification_confirm</string>
+
+    <!-- Shared preferences here-->
+    <string name="preferences_app">preferences_app</string>
+    <string name="preferences_app_url_conection"></string>
+    <string name="preferences_app_intervalo_conection"></string>
+    <string name="txt_hoje">Hoje</string>
+    <string name="txt_atualizar">Atualizar</string>
+    <string name="txt_configurar">Configurações</string>
+    <string name="title_activity_preferences">Settings</string>
+
+    <!-- XML Preferencias-->
+    <string name="pref_titulo_categoria_txt">Formato de conexão</string>
+    <string name="pref_url_summary_txt">Campo para URL</string>
+    <string name="pref_url_titulo_txt">Local para conexão</string>
+    <string name="pref_intervalo_titulo_txt">Intervalo de verificação</string>
+
+    <string name="pref_key_url">pref_key_url</string>
+    <string name="pref_key_intervalo">pref_key_intervalo</string>
+
+    <string-array name="inervalo_alerta">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
+    <string-array name="desc_inervalo_alerta">
+        <item>5 minutos</item>
+        <item>10 minutos</item>
+        <item>15 minutos</item>
+    </string-array>
+</resources>

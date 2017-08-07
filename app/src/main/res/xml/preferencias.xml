@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory
+        android:title="@string/pref_titulo_categoria_txt"
+        >
+
+    <EditTextPreference
+        android:key="@string/pref_key_url"
+        android:summary="@string/pref_url_summary_txt"
+        android:title="@string/pref_url_titulo_txt" />
+
+    </PreferenceCategory>
+
+    <ListPreference
+        android:key="@string/pref_key_intervalo"
+        android:entryValues="@array/inervalo_alerta"
+        android:entries="@array/desc_inervalo_alerta"
+        android:defaultValue="1"
+        android:title="@string/pref_intervalo_titulo_txt" />
+</PreferenceScreen>
