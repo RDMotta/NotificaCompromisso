@@ -43,6 +43,8 @@ public class NotificationCompromisso {
 
 
         Intent resultIntent = new Intent(mContext, MainActivity.class);
+        String action_notification_confirm = mContext.getString(R.string.action_notification_confirm);
+        resultIntent.putExtra(action_notification_confirm, compromisso);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         stackBuilder.addParentStack(MainActivity.class);
 

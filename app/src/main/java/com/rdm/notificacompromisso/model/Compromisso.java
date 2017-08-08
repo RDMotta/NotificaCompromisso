@@ -2,7 +2,6 @@ package com.rdm.notificacompromisso.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import java.util.Date;
 /**
  * Created by Robson Da Motta on 26/07/2017.
  */
@@ -14,7 +13,10 @@ public class Compromisso implements Parcelable {
     private String descricao;
     private String autor;
     private Long hora;
-    private Date data;
+    private int dia;
+    private int mes;
+    private int ano;
+
 
     public long getIdentificador() {
         return identificador;
@@ -48,12 +50,28 @@ public class Compromisso implements Parcelable {
         this.hora = hora;
     }
 
-    public Date getData() {
-        return data;
+    public int getDia() {
+        return dia;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
     }
 
     @Override
@@ -67,7 +85,9 @@ public class Compromisso implements Parcelable {
         dest.writeString(this.descricao);
         dest.writeString(this.autor);
         dest.writeValue(this.hora);
-        dest.writeLong(this.data != null ? this.data.getTime() : -1);
+        dest.writeInt(this.dia);
+        dest.writeInt(this.mes);
+        dest.writeInt(this.ano);
     }
 
     public Compromisso() {
@@ -78,8 +98,9 @@ public class Compromisso implements Parcelable {
         this.descricao = in.readString();
         this.autor = in.readString();
         this.hora = (Long) in.readValue(Long.class.getClassLoader());
-        long tmpData = in.readLong();
-        this.data = tmpData == -1 ? null : new Date(tmpData);
+        this.dia = in.readInt();
+        this.mes = in.readInt();
+        this.ano = in.readInt();
     }
 
     public static final Creator<Compromisso> CREATOR = new Creator<Compromisso>() {

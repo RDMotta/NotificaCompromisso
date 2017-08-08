@@ -17,6 +17,6 @@
         android:key="@string/pref_key_intervalo"
         android:entryValues="@array/inervalo_alerta"
         android:entries="@array/desc_inervalo_alerta"
-        android:defaultValue="1"
+        android:defaultValue="5"
         android:title="@string/pref_intervalo_titulo_txt" />
 </PreferenceScreen>

@@ -8,6 +8,8 @@
     <string name="confirm_acion">Confirmado seu compromisso!</string>
     <string name="confirm_txt">Confirmar</string>
     <string name="cancel_txt">Cancelar</string>
+    <string name="ok_txt">OK</string>
+
 
     <string name="action_bind_service">com.rdm.services.ACTION_BIND_SERVICE</string>
     <string name="id_notification_value">id_notification_value</string>
@@ -15,8 +17,10 @@
 
     <!-- Shared preferences here-->
     <string name="preferences_app">preferences_app</string>
-    <string name="preferences_app_url_conection"></string>
-    <string name="preferences_app_intervalo_conection"></string>
+    <string name="preferences_app_url_conection">preferences_app_url_conection</string>
+    <string name="preferences_app_intervalo_conection">preferences_app_intervalo_conection</string>
+    <string name="preferences_app_imei">preferences_app_imei</string>
+
     <string name="txt_hoje">Hoje</string>
     <string name="txt_atualizar">Atualizar</string>
     <string name="txt_configurar">Configurações</string>
@@ -28,8 +32,8 @@
     <string name="pref_url_titulo_txt">Local para conexão</string>
     <string name="pref_intervalo_titulo_txt">Intervalo de verificação</string>
 
-    <string name="pref_key_url">pref_key_url</string>
-    <string name="pref_key_intervalo">pref_key_intervalo</string>
+    <string name="pref_key_url">@string/preferences_app_url_conection</string>
+    <string name="pref_key_intervalo">@string/preferences_app_intervalo_conection</string>
 
     <string-array name="inervalo_alerta">
         <item>5</item>
@@ -41,4 +45,7 @@
         <item>10 minutos</item>
         <item>15 minutos</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

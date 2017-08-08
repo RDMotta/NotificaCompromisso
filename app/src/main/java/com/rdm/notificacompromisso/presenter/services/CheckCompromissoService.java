@@ -33,18 +33,15 @@ public class CheckCompromissoService extends Service {
 
     public void checkCompromissos(String url){
         if (URLUtil.isValidUrl(url)){
-            ParamServiceDTO paramServiceDTO = new ParamServiceDTO(this,url);
-            new AsyncTaskService().execute(paramServiceDTO);
-        } else {
-            ParamServiceDTO paramServiceDTO = new ParamServiceDTO(this,"http://geo-pt.appspot.com/srtmPT?x=117006.46&y=-11722.69&interpol=bilinear");
+            ParamServiceDTO paramServiceDTO = new ParamServiceDTO(getApplicationContext(),url);
             new AsyncTaskService().execute(paramServiceDTO);
         }
     }
 
     public void confirmCompromissos(int idCompromisso){
-        String url = PreferencesUtils.getPreferencesUrlConection(this);
+        String url = PreferencesUtils.getPreferencesUrlConection(getApplicationContext());
         if (URLUtil.isValidUrl(url)){
-            ParamServiceDTO paramServiceDTO = new ParamServiceDTO(this, url, idCompromisso);
+            ParamServiceDTO paramServiceDTO = new ParamServiceDTO(getApplicationContext(), url, idCompromisso);
             new AsyncTaskServiceSendConfirm().execute(paramServiceDTO);
         }
     }

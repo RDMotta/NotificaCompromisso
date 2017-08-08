@@ -16,8 +16,6 @@ import com.rdm.notificacompromisso.presenter.receivers.AlarmReceiver;
 import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
 
 
@@ -34,16 +32,9 @@ public class AsyncTaskService extends AsyncTask<ParamServiceDTO, Void, Compromis
     protected Compromisso doInBackground(ParamServiceDTO... params) {
         mContext = params[0].getContext();
         mUrl = params[0].getUrl();
-        URL url = null;
         Compromisso compromisso = null;
         try {
-            url = new URL(mUrl);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            compromisso = obterCompromissoFromUrl(url);
+            compromisso = obterCompromissoFromUrl(mUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,8 +64,8 @@ public class AsyncTaskService extends AsyncTask<ParamServiceDTO, Void, Compromis
     }
 
 
-    protected Compromisso obterCompromissoFromUrl(URL url) throws IOException {
-        ConnectHttp connectHttp = new ConnectHttp();
+    protected Compromisso obterCompromissoFromUrl(String url) throws IOException {
+        ConnectHttp connectHttp = new ConnectHttp(mContext);
         return connectHttp.requestCompromissoGet(url);
     }
 

@@ -10,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 
 import com.rdm.notificacompromisso.R;
 import com.rdm.notificacompromisso.presenter.services.CheckCompromissoService;
+import com.rdm.notificacompromisso.presenter.utils.DialogUtils;
 import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
 
 public class MainActivity extends AppCompatActivity
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity
     protected boolean onActionItemMenu(int menuItemId) {
         boolean actionItemExecuted = false;
         if ((menuItemId == R.id.nav_today) || (menuItemId == R.id.action_today)) {
+            getFragmentManager().beginTransaction().replace(R.id.content, CalendarFragment.newInstance()).commit();
             bindCheckCompromisso();
             actionItemExecuted = true;
         } else if ((menuItemId == R.id.nav_refresh) || (menuItemId == R.id.action_refresh)) {
@@ -99,9 +101,8 @@ public class MainActivity extends AppCompatActivity
             actionItemExecuted = true;
         } else if ((menuItemId == R.id.nav_preferences) || (menuItemId == R.id.action_preferences)) {
 
-
-
-            getFragmentManager().beginTransaction().replace(R.id.content, new PreferenciasActivity()).commit();
+            getFragmentManager().beginTransaction().
+                    replace(R.id.content, new PreferenciasActivity()).commit();
             actionItemExecuted = true;
         }
         return actionItemExecuted;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity
      */
     protected void bindCheckCompromisso() {
         if (mIsBound) {
-            String urlConection = PreferencesUtils.getPreferencesUrlConection(this);
+            String urlConection = PreferencesUtils.getPreferencesUrlConection(getApplicationContext());
             mBoundService.checkCompromissos(urlConection);
         }
     }
@@ -123,6 +124,12 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         doBindService();
+        getFragmentManager().beginTransaction().replace(R.id.content, CalendarFragment.newInstance()).commit();
+        AlertDialog.Builder alerta = DialogUtils.showCompromisso(this, getIntent());
+        if (alerta != null){
+            alerta.show();
+        }
+
     }
 
     /**

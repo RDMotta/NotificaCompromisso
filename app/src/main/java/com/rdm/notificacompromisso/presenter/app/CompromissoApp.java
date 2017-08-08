@@ -23,7 +23,8 @@ public class CompromissoApp extends Application {
     }
 
     protected void initializeApp(){
-        String urlConection = PreferencesUtils.getPreferencesUrlConection(this);
+
+        String urlConection = PreferencesUtils.getPreferencesUrlConection(getApplicationContext());
         Intent intent = new Intent(this, CheckCompromissoService.class);
         intent.putExtra(getString(R.string.action_bind_service), urlConection);
         startService(intent);
