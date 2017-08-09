@@ -1,9 +1,11 @@
 package com.rdm.notificacompromisso.presenter.services;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.rdm.notificacompromisso.model.ParamServiceDTO;
+import com.rdm.notificacompromisso.presenter.db.CompromissosProvider;
 import com.rdm.notificacompromisso.presenter.http.ConnectHttp;
 
 import java.io.IOException;
@@ -17,15 +19,23 @@ public class AsyncTaskServiceSendConfirm extends AsyncTask<ParamServiceDTO, Void
     private Context mContext;
     private String mUrl;
     private int mIdentificador;
-    private String mImei;
 
     @Override
     protected Boolean doInBackground(ParamServiceDTO... paramServiceDTOs) {
         mContext = paramServiceDTOs[0].getContext();
         mUrl = paramServiceDTOs[0].getUrl();
         mIdentificador = paramServiceDTOs[0].getIdentificador();
+        boolean confirmCompromisso;
         try {
-            return confirmar(mUrl);
+            confirmCompromisso = confirmar(mUrl);
+            if (confirmCompromisso) {
+
+                ContentResolver contentResolver = mContext.getContentResolver();
+                contentResolver.delete(
+                        CompromissosProvider.CONTENT_URI.buildUpon().appendPath(String.valueOf(mIdentificador)).build(),
+                        null, null);
+            }
+            return confirmCompromisso;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

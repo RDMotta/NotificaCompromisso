@@ -1,16 +1,15 @@
 package com.rdm.notificacompromisso.presenter.services;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.NotificationCompat;
 
+import com.rdm.notificacompromisso.R;
 import com.rdm.notificacompromisso.model.Compromisso;
-import com.rdm.notificacompromisso.model.NotificationCompromisso;
 import com.rdm.notificacompromisso.model.ParamServiceDTO;
+import com.rdm.notificacompromisso.presenter.db.CompromissosProvider;
 import com.rdm.notificacompromisso.presenter.http.ConnectHttp;
 import com.rdm.notificacompromisso.presenter.receivers.AlarmReceiver;
 import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
@@ -43,24 +42,28 @@ public class AsyncTaskService extends AsyncTask<ParamServiceDTO, Void, Compromis
     }
 
     protected void onPostExecute(Compromisso compromisso) {
-        if (compromisso != null) {
-            notificarCompromisso(compromisso);
-        }
-        CallOnNextFifteenMinutes();
+        notificarCompromisso(compromisso);
+        CallOnNextMinutes();
     }
 
-
-
     protected void notificarCompromisso(Compromisso compromisso) {
+        if (compromisso == null) {
+            return;
+        }
 
-        NotificationCompromisso notificationCompromisso = new NotificationCompromisso(mContext);
-        NotificationCompat.Builder mBuilder = notificationCompromisso.buildCompromisso(compromisso);
+        AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
-        NotificationManager mNotificationManager =
-                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intentAlertCompromisso = new Intent(mContext, AlarmReceiver.class);
+        intentAlertCompromisso.putExtra(mContext.getString(R.string.action_alarm_confirm), compromisso);
+        PendingIntent alarmIntentCompromisso = PendingIntent.getBroadcast(mContext, 0, intentAlertCompromisso, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(compromisso.getAno(), compromisso.getMes() -1, compromisso.getDia());
+        calendar.set(Calendar.HOUR_OF_DAY, compromisso.getHora());
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntentCompromisso);
 
 
-        mNotificationManager.notify((int) compromisso.getIdentificador(), mBuilder.build());
+        CompromissosProvider.adicionarCompromisso(mContext, compromisso);
     }
 
 
@@ -69,16 +72,16 @@ public class AsyncTaskService extends AsyncTask<ParamServiceDTO, Void, Compromis
         return connectHttp.requestCompromissoGet(url);
     }
 
-    protected void CallOnNextFifteenMinutes() {
+    protected void CallOnNextMinutes() {
         AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(mContext, AlarmReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+        Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
+        PendingIntent alarmIntentAlarm = PendingIntent.getBroadcast(mContext, 0, intentAlarm, 0);
 
         int intervalo = PreferencesUtils.getPreferencesIntervaloConection(mContext);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.MINUTE, intervalo);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntentAlarm);
     }
 }

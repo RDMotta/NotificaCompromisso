@@ -70,8 +70,6 @@ public class PreferencesUtils implements Preference.OnPreferenceChangeListener{
         }
     }
 
-
-
     public static void guardarImei(Context context){
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preferences_app), Context.MODE_PRIVATE);

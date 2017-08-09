@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="create_tables">
+        <item>
+            CREATE TABLE IF NOT EXISTS compromissos (
+                identificador INTEGER,
+                descricao TEXT,
+                autor VARCHAR(50),
+                hora INTEGER,
+                dia INTEGER,
+                mes INTEGER,
+                ano INTEGER);
+        </item>
+    </string-array>
+
+</resources>

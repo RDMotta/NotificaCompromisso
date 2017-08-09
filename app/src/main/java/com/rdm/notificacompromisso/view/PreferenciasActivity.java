@@ -12,7 +12,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.rdm.notificacompromisso.R;
 import com.rdm.notificacompromisso.presenter.services.CheckCompromissoService;
@@ -21,8 +20,9 @@ import com.rdm.notificacompromisso.presenter.services.CheckCompromissoService;
  * Created by Robson Da Motta on 06/08/2017.
  */
 
-public class PreferenciasActivity extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener , ServiceConnection {
+public class PreferenciasActivity extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, ServiceConnection {
 
+    private boolean boundedService;
     private Resources resources;
     private CheckCompromissoService mBoundService;
     private SharedPreferences preferences;
@@ -33,7 +33,7 @@ public class PreferenciasActivity extends PreferenceFragment implements SharedPr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferencias);
-
+        boundedService = false;
         resources = getActivity().getResources();
         editTextPreference = (EditTextPreference) findPreference(resources.getString(R.string.pref_key_url));
         listPreference = (ListPreference) findPreference(resources.getString(R.string.pref_key_intervalo));
@@ -45,9 +45,7 @@ public class PreferenciasActivity extends PreferenceFragment implements SharedPr
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-
-        SharedPreferences pref =  getActivity().getApplicationContext()
+        SharedPreferences pref = getActivity().getApplicationContext()
                 .getSharedPreferences(resources.getString(R.string.preferences_app), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = pref.edit();
@@ -55,13 +53,8 @@ public class PreferenciasActivity extends PreferenceFragment implements SharedPr
         editor.putInt(listPreference.getKey(), Integer.valueOf(listPreference.getValue()));
         editor.commit();
 
-        Log.i("Log","url key:"+ editTextPreference.getKey());
-        Log.i("Log","intervalo key:"+ listPreference.getKey());
-
-
-
         if (key.equals(editTextPreference.getKey())) {
-            if (mBoundService!= null) {
+            if (boundedService) {
                 String url = preferences.getString(editTextPreference.getKey(), "");
                 mBoundService.checkCompromissos(url);
             }
@@ -69,8 +62,11 @@ public class PreferenciasActivity extends PreferenceFragment implements SharedPr
     }
 
     protected void doBindService() {
-        Intent intentBindService = new Intent(getActivity(), CheckCompromissoService.class);
-        getActivity().bindService(intentBindService, this, Context.BIND_AUTO_CREATE);
+        if (!boundedService) {
+            Intent intentBindService = new Intent(getActivity(), CheckCompromissoService.class);
+            getActivity().bindService(intentBindService, this, Context.BIND_AUTO_CREATE);
+            boundedService = true;
+        }
     }
 
     @Override
@@ -83,5 +79,6 @@ public class PreferenciasActivity extends PreferenceFragment implements SharedPr
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
         mBoundService = null;
+        boundedService = false;
     }
 }

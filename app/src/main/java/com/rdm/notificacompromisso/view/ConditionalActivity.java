@@ -26,10 +26,8 @@ public class ConditionalActivity extends AppCompatActivity {
         String urlConection = PreferencesUtils.getPreferencesUrlConection(this);
         if (!urlConection.equals("")){
             initializeCheckCompromissoServece(urlConection);
-            finish();
-        } else {
-            initializeMain();
         }
+        initializeMain();
     }
 
     protected void initializeCheckCompromissoServece(String url){
@@ -69,6 +67,8 @@ public class ConditionalActivity extends AppCompatActivity {
                 if (PermissionUtils.permissionGranted(requestCode, READ_PHONE_STATE, grantResults)) {
                     PreferencesUtils.guardarImei(this);
                     callMain();
+                } else {
+                    finish();
                 }
                 break;
         }

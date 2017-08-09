@@ -12,11 +12,10 @@ public class Compromisso implements Parcelable {
     private long identificador;
     private String descricao;
     private String autor;
-    private Long hora;
+    private int hora;
     private int dia;
     private int mes;
     private int ano;
-
 
     public long getIdentificador() {
         return identificador;
@@ -42,11 +41,11 @@ public class Compromisso implements Parcelable {
         this.autor = autor;
     }
 
-    public Long getHora() {
+    public int getHora() {
         return hora;
     }
 
-    public void setHora(Long hora) {
+    public void setHora(int hora) {
         this.hora = hora;
     }
 
@@ -74,6 +73,7 @@ public class Compromisso implements Parcelable {
         this.ano = ano;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -84,7 +84,7 @@ public class Compromisso implements Parcelable {
         dest.writeLong(this.identificador);
         dest.writeString(this.descricao);
         dest.writeString(this.autor);
-        dest.writeValue(this.hora);
+        dest.writeInt(this.hora);
         dest.writeInt(this.dia);
         dest.writeInt(this.mes);
         dest.writeInt(this.ano);
@@ -97,7 +97,7 @@ public class Compromisso implements Parcelable {
         this.identificador = in.readLong();
         this.descricao = in.readString();
         this.autor = in.readString();
-        this.hora = (Long) in.readValue(Long.class.getClassLoader());
+        this.hora = in.readInt();
         this.dia = in.readInt();
         this.mes = in.readInt();
         this.ano = in.readInt();
