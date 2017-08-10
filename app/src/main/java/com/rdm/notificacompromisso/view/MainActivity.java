@@ -127,33 +127,12 @@ public class MainActivity extends AppCompatActivity
         doBindService();
         getFragmentManager().beginTransaction().replace(R.id.content, CalendarFragment.newInstance()).commit();
 
-        //showCompromissos();
-
         AlertDialog.Builder alerta = DialogUtils.showCompromisso(this, getIntent());
         if (alerta != null){
             alerta.show();
         }
 
     }
-
-//    private void showCompromissos() {
-//
-//        String URL = "content://" + CompromissosProvider.PROVIDER_NAME;
-//        Uri compromissos = Uri.parse(URL);
-//        Cursor c = managedQuery(compromissos, null, null, null, CompromissosProvider.DIA);
-//        if (c.moveToFirst()) {
-//            do{
-//
-//
-//                Toast.makeText(this,"Compromisso em: " + c.getInt(c.getColumnIndex(CompromissosProvider.DIA)) + "" +
-//                       " As : " + c.getInt(c.getColumnIndex(CompromissosProvider.HORA)), Toast.LENGTH_SHORT).show();
-//
-//
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//
-//    }
 
     /**
      * Método local para iniciar a coneção com o Service
