@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.rdm.notificacompromisso.model.Compromisso;
 import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 /**
  * Created by Robson Da Motta on 01/08/2017.
@@ -79,29 +81,38 @@ public class ConnectHttp implements HttpGetMethods, HttpPostMethods {
         return sb.toString();
     }
 
-    protected Compromisso compromissoFromStrJSON(String compromisso) {
-        Compromisso compRecebido = null;
+    protected ArrayList<Compromisso> compromissosFromStrJSON(String strCompromisso) {
+        ArrayList<Compromisso> compRecebidos = new ArrayList<>();
         try {
-            JSONObject json = new JSONObject(compromisso);
-            compRecebido = new Compromisso();
+            JSONArray jsonArray = new JSONArray(strCompromisso);
+            for (int indice =0; indice < jsonArray.length(); indice ++){
+                String strJson = jsonArray.get(indice).toString();
 
-            compRecebido.setIdentificador(json.getLong("identificador"));
-            compRecebido.setDescricao(json.getString("descricao"));
-            compRecebido.setAutor(json.getString("autor"));
-            compRecebido.setHora(json.getInt("hora"));
-            compRecebido.setDia(json.getInt("dia"));
-            compRecebido.setMes(json.getInt("mes"));
-            compRecebido.setAno(json.getInt("ano"));
+                JSONObject json = new JSONObject(strJson);
+                Compromisso compRecebido = new Compromisso();
+
+                compRecebido.setIdentificador(json.getLong("identificador"));
+                compRecebido.setTitulo(json.getString("titulo"));
+                compRecebido.setDescricao(json.getString("descricao"));
+                compRecebido.setAutor(json.getString("autor"));
+                compRecebido.setHora(json.getInt("hora"));
+                compRecebido.setMinuto(json.getInt("minuto"));
+                compRecebido.setDia(json.getInt("dia"));
+                compRecebido.setMes(json.getInt("mes")-1);
+                compRecebido.setAno(json.getInt("ano"));
+                compRecebido.setCancelado(json.getInt("cancelado"));
+                compRecebidos.add(compRecebido);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return compRecebido;
+        return compRecebidos;
     }
 
     @Override
-    public Compromisso requestCompromissoGet(String url) throws IOException {
-        Compromisso compromisso = null;
+    public ArrayList<Compromisso>  requestCompromissoGet(String url) throws IOException {
+        ArrayList<Compromisso>  compromisso = null;
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
         String imei = PreferencesUtils.getPreferencesIMEI(mContext);
@@ -120,7 +131,7 @@ public class ConnectHttp implements HttpGetMethods, HttpPostMethods {
                 throw new IOException("HTTP error code: " + responseCode);
             }
             String retorno = streamToString(inputStream);
-            compromisso = compromissoFromStrJSON(retorno);
+            compromisso = compromissosFromStrJSON(retorno);
 
         } finally {
             if (inputStream != null) {
@@ -134,7 +145,7 @@ public class ConnectHttp implements HttpGetMethods, HttpPostMethods {
     }
 
     @Override
-    public Compromisso requestCompromissoPost(String url) throws IOException {
+    public ArrayList<Compromisso>  requestCompromissoPost(String url) throws IOException {
         return null;
     }
 

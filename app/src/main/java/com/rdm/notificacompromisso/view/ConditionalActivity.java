@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.rdm.notificacompromisso.R;
-import com.rdm.notificacompromisso.presenter.services.CheckCompromissoService;
 import com.rdm.notificacompromisso.presenter.utils.PermissionUtils;
 import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
 
@@ -19,34 +17,24 @@ import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
 public class ConditionalActivity extends AppCompatActivity {
 
     public static final int READ_PHONE_STATE = 101;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        String urlConection = PreferencesUtils.getPreferencesUrlConection(this);
-        if (!urlConection.equals("")){
-            initializeCheckCompromissoServece(urlConection);
-        }
         initializeMain();
     }
 
-    protected void initializeCheckCompromissoServece(String url){
-        Intent intentServer = new Intent(this, CheckCompromissoService.class);
-        intentServer.putExtra(getString(R.string.action_bind_service),url);
-        startService(intentServer);
-    }
-
-    protected void initializeMain(){
-        if (PermissionUtils.requestPermission(this, READ_PHONE_STATE, Manifest.permission.READ_PHONE_STATE)){
+    protected void initializeMain() {
+        if (PermissionUtils.requestPermission(this, READ_PHONE_STATE, Manifest.permission.READ_PHONE_STATE)) {
             callMain();
         }
     }
 
-    protected void callMain(){
+    protected void callMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

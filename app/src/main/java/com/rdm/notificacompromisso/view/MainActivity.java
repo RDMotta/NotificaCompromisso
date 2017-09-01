@@ -10,7 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 
 import com.rdm.notificacompromisso.R;
 import com.rdm.notificacompromisso.presenter.services.CheckCompromissoService;
-import com.rdm.notificacompromisso.presenter.utils.DialogUtils;
 import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
 
 public class MainActivity extends AppCompatActivity
@@ -58,14 +56,16 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getFragmentManager().getBackStackEntryCount() == 0) {
+                super.onBackPressed();
+            } else {
+                getFragmentManager().popBackStack();
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -88,31 +88,28 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Método para centralizar as ações dos menus
+     *
      * @param menuItemId identificador do item de menu selecionado
      * @return retorno verdadeiro quando identificado um item de menu
      */
     protected boolean onActionItemMenu(int menuItemId) {
         boolean actionItemExecuted = false;
-        if ((menuItemId == R.id.nav_today) || (menuItemId == R.id.action_today)) {
-            getFragmentManager().beginTransaction().replace(R.id.content, CalendarFragment.newInstance()).commit();
-            bindCheckCompromisso();
-            actionItemExecuted = true;
-        } else if ((menuItemId == R.id.nav_refresh) || (menuItemId == R.id.action_refresh)) {
+        if ((menuItemId == R.id.nav_refresh) || (menuItemId == R.id.action_refresh)) {
+            addFragmendCalendar();
             bindCheckCompromisso();
             actionItemExecuted = true;
         } else if ((menuItemId == R.id.nav_preferences) || (menuItemId == R.id.action_preferences)) {
 
+
             getFragmentManager().beginTransaction().
-                    replace(R.id.content, new PreferenciasActivity()).commit();
+                    replace(R.id.content, new PreferenciasActivity())
+                    .addToBackStack(null)
+                    .commit();
             actionItemExecuted = true;
         }
         return actionItemExecuted;
     }
 
-    /**
-     * Método para acessar o Service e realizar a conexão
-     * com o WS para obter novas atualizações;
-     */
     protected void bindCheckCompromisso() {
         if (mIsBound) {
             String urlConection = PreferencesUtils.getPreferencesUrlConection(getApplicationContext());
@@ -120,18 +117,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
         doBindService();
-        getFragmentManager().beginTransaction().replace(R.id.content, CalendarFragment.newInstance()).commit();
+        addFragmendCalendar();
+    }
 
-        AlertDialog.Builder alerta = DialogUtils.showCompromisso(this, getIntent());
-        if (alerta != null){
-            alerta.show();
-        }
-
+    protected void addFragmendCalendar() {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, CalendarFragment.newInstance())
+                .commit();
     }
 
     /**
@@ -149,9 +146,6 @@ public class MainActivity extends AppCompatActivity
         doUnbindService();
     }
 
-    /**
-     * Método local para remover a conexão com o Servie
-     */
     protected void doUnbindService() {
         if (mIsBound) {
             unbindService(this);

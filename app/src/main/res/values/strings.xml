@@ -2,6 +2,8 @@
     <string name="app_name">Notifica Compromisso</string>
     <string name="title_activity_main">Notifica Compromisso</string>
     <string name="title_activiy_preferencias">Configurações e preferências</string>
+    <string name="title_activiy_eventos">Compromisso</string>
+    <string name="title_activiy_mult_eventos">Compromisso do período</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
@@ -14,6 +16,8 @@
     <string name="action_bind_service">com.rdm.services.ACTION_BIND_SERVICE</string>
     <string name="id_notification_value">id_notification_value</string>
     <string name="action_notification_confirm">action_notification_confirm</string>
+    <string name="action_notification_show">action_notification_show</string>
+    <string name="action_evento_notification">action_evento_notification</string>
     <string name="action_alarm_confirm">action_alarm_confirm</string>
 
     <!--DB Version -->
@@ -49,7 +53,4 @@
         <item>10 minutos</item>
         <item>15 minutos</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

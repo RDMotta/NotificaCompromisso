@@ -37,6 +37,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="com.rdm.notificacompromisso.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -46,16 +47,37 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="com.rdm.notificacompromisso.intent.action.ACTION_OK" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.PreferenciasActivity"
             android:label="@string/title_activiy_preferencias"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="com.rdm.notificacompromisso.intent.action.ACTION_PREF" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.EventosActivity"
+            android:label="@string/title_activiy_eventos"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.rdm.notificacompromisso.intent.action.ACTION_EVENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.MultiEventosActivity"
+            android:label="@string/title_activiy_mult_eventos"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.rdm.notificacompromisso.intent.action.ACTION_EVENT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -72,7 +94,7 @@
         </receiver>
         <receiver
             android:name=".presenter.receivers.AlarmReceiver"
-            android:process=":remote"></receiver>
+            android:process=":remote" />
 
         <provider
             android:name=".presenter.db.CompromissosProvider"

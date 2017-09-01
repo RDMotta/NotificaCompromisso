@@ -15,6 +15,7 @@ import com.rdm.notificacompromisso.presenter.receivers.AlarmReceiver;
 import com.rdm.notificacompromisso.presenter.utils.PreferencesUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -22,52 +23,59 @@ import java.util.Calendar;
  * Created by Robson Da Motta on 26/07/2017.
  */
 
-public class AsyncTaskService extends AsyncTask<ParamServiceDTO, Void, Compromisso> {
+public class AsyncTaskService extends AsyncTask<ParamServiceDTO, Void, ArrayList<Compromisso> > {
 
     private Context mContext;
     private String mUrl;
 
     @Override
-    protected Compromisso doInBackground(ParamServiceDTO... params) {
+    protected ArrayList<Compromisso>  doInBackground(ParamServiceDTO... params) {
         mContext = params[0].getContext();
         mUrl = params[0].getUrl();
-        Compromisso compromisso = null;
+        ArrayList<Compromisso>  compromisso = null;
         try {
-            compromisso = obterCompromissoFromUrl(mUrl);
+            compromisso = obterCompromissosFromUrl(mUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return compromisso;
     }
-
-    protected void onPostExecute(Compromisso compromisso) {
-        notificarCompromisso(compromisso);
+    @Override
+    protected void onPostExecute(ArrayList<Compromisso>  compromissos) {
+        notificarCompromisso(compromissos);
         CallOnNextMinutes();
     }
 
-    protected void notificarCompromisso(Compromisso compromisso) {
-        if (compromisso == null) {
+    protected void notificarCompromisso(ArrayList<Compromisso>  compromissos) {
+        if (compromissos == null) {
+            return;
+        }
+        if (compromissos.size() == 0){
             return;
         }
 
-        AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        CompromissosProvider compromissosProvider = new CompromissosProvider();
+        for (Compromisso compromisso : compromissos ) {
+            AlarmManager alarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
-        Intent intentAlertCompromisso = new Intent(mContext, AlarmReceiver.class);
-        intentAlertCompromisso.putExtra(mContext.getString(R.string.action_alarm_confirm), compromisso);
-        PendingIntent alarmIntentCompromisso = PendingIntent.getBroadcast(mContext, 0, intentAlertCompromisso, 0);
+            Intent intentAlertCompromisso = new Intent(mContext, AlarmReceiver.class);
+            intentAlertCompromisso.putExtra(mContext.getString(R.string.action_alarm_confirm), compromisso);
+            PendingIntent alarmIntentCompromisso = PendingIntent.getBroadcast(mContext, 0, intentAlertCompromisso, 0);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(compromisso.getAno(), compromisso.getMes() -1, compromisso.getDia());
-        calendar.set(Calendar.HOUR_OF_DAY, compromisso.getHora());
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntentCompromisso);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(compromisso.getAno(), compromisso.getMes(), compromisso.getDia());
+            calendar.set(Calendar.HOUR_OF_DAY, compromisso.getHora());
+            calendar.set(Calendar.MINUTE, compromisso.getMinuto());
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntentCompromisso);
 
 
-        CompromissosProvider.adicionarCompromisso(mContext, compromisso);
+            compromissosProvider.adicionarCompromisso(mContext, compromisso);
+        }
     }
 
 
-    protected Compromisso obterCompromissoFromUrl(String url) throws IOException {
+    protected ArrayList<Compromisso> obterCompromissosFromUrl(String url) throws IOException {
         ConnectHttp connectHttp = new ConnectHttp(mContext);
         return connectHttp.requestCompromissoGet(url);
     }

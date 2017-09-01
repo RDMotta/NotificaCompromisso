@@ -25,12 +25,15 @@ import java.util.HashMap;
 public class CompromissosProvider extends ContentProvider {
 
     public static final String IDENTIFICADOR = "identificador";
+    public static final String TITULO = "titulo";
     public static final String DESCRICAO = "descricao";
     public static final String AUTOR = "autor";
     public static final String HORA = "hora";
+    public static final String MINUTO = "minuto";
     public static final String DIA = "dia";
     public static final String MES = "mes";
     public static final String ANO = "ano";
+    public static final String CANCELADO = "cancelado";
     public static final String PROVIDER_NAME = "com.rdm.notificacompromisso.presenter.provider.CompromissosProvider";
     public static final String TABLE_NAME = "compromissos";
     public static final String URL = "content://" + PROVIDER_NAME + "/" + TABLE_NAME;
@@ -48,18 +51,52 @@ public class CompromissosProvider extends ContentProvider {
 
     protected DbHelper mHelper;
 
-    public static Uri adicionarCompromisso(Context context, Compromisso compromisso) {
+    public static Compromisso compromissoFrom(Cursor cursor) {
+        Compromisso compromisso = new Compromisso();
+
+        compromisso.setIdentificador(cursor.getInt(cursor.getColumnIndex(CompromissosProvider.IDENTIFICADOR)));
+        compromisso.setTitulo(cursor.getString(cursor.getColumnIndex(CompromissosProvider.TITULO)));
+        compromisso.setAutor(cursor.getString(cursor.getColumnIndex(CompromissosProvider.AUTOR)));
+        compromisso.setDescricao(cursor.getString(cursor.getColumnIndex(CompromissosProvider.DESCRICAO)));
+        compromisso.setDia(cursor.getInt(cursor.getColumnIndex(CompromissosProvider.DIA)));
+        compromisso.setMes(cursor.getInt(cursor.getColumnIndex(CompromissosProvider.MES)));
+        compromisso.setAno(cursor.getInt(cursor.getColumnIndex(CompromissosProvider.ANO)));
+        compromisso.setHora(cursor.getInt(cursor.getColumnIndex(CompromissosProvider.HORA)));
+        compromisso.setMinuto(cursor.getInt(cursor.getColumnIndex(CompromissosProvider.MINUTO)));
+        compromisso.setCancelado(cursor.getInt(cursor.getColumnIndex(CompromissosProvider.CANCELADO)));
+
+        return compromisso;
+    }
+
+    protected ContentValues pegarContentValueFrom(Compromisso compromisso) {
         ContentValues values = new ContentValues();
         values.put(CompromissosProvider.IDENTIFICADOR, compromisso.getIdentificador());
+        values.put(CompromissosProvider.TITULO, compromisso.getTitulo());
         values.put(CompromissosProvider.DESCRICAO, compromisso.getDescricao());
         values.put(CompromissosProvider.AUTOR, compromisso.getAutor());
         values.put(CompromissosProvider.HORA, compromisso.getHora());
+        values.put(CompromissosProvider.MINUTO, compromisso.getMinuto());
         values.put(CompromissosProvider.DIA, compromisso.getDia());
         values.put(CompromissosProvider.MES, compromisso.getMes());
         values.put(CompromissosProvider.ANO, compromisso.getAno());
+        values.put(CompromissosProvider.CANCELADO, compromisso.getCancelado());
+        return values;
+    }
+
+    public Uri adicionarCompromisso(Context context, Compromisso compromisso) {
+        ContentValues values = pegarContentValueFrom(compromisso);
         Uri uri = context.getContentResolver().insert(
                 CompromissosProvider.CONTENT_URI, values);
         return uri;
+    }
+
+    public boolean atualizarCompromisso(Context context, Compromisso compromisso) {
+        ContentValues values = pegarContentValueFrom(compromisso);
+        String whereClause = CompromissosProvider.IDENTIFICADOR + " = ? ";
+        String[] whereArgs = {String.valueOf(compromisso.getIdentificador())};
+        int retorno = context.getContentResolver().update(
+                CompromissosProvider.CONTENT_URI, values, whereClause, whereArgs);
+        return retorno > 0;
     }
 
     @Override

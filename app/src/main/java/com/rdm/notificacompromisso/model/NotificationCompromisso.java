@@ -8,7 +8,6 @@ import android.support.v4.app.TaskStackBuilder;
 
 import com.rdm.notificacompromisso.R;
 import com.rdm.notificacompromisso.view.ActionNotificationActivity;
-import com.rdm.notificacompromisso.view.MainActivity;
 
 /**
  * Created by Robson Da Motta on 06/08/2017.
@@ -23,30 +22,30 @@ public class NotificationCompromisso {
     }
 
     public NotificationCompat.Builder buildCompromisso(Compromisso compromisso){
-        int idNotification = (int) compromisso.getIdentificador();
 
         TaskStackBuilder stackBuilderActionConfirm = TaskStackBuilder.create(mContext);
         stackBuilderActionConfirm.addParentStack(ActionNotificationActivity.class);
-        stackBuilderActionConfirm.addNextIntent(getActionIntentConfirm(idNotification));
+        stackBuilderActionConfirm.addNextIntent(getActionIntentConfirm(compromisso));
 
         TaskStackBuilder stackBuilderActionCancel = TaskStackBuilder.create(mContext);
         stackBuilderActionCancel.addParentStack(ActionNotificationActivity.class);
-        stackBuilderActionCancel.addNextIntent(getActionIntentCancel(idNotification));
+        stackBuilderActionCancel.addNextIntent(getActionIntentCancel(compromisso));
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setSmallIcon(R.drawable.ic_notification)
                         .setContentTitle(compromisso.getAutor())
                         .setContentText(compromisso.getDescricao())
-                        .addAction(android.R.drawable.ic_input_add, mContext.getString(R.string.confirm_txt) ,getActionConfirm(stackBuilderActionConfirm))
-                        .addAction(android.R.drawable.ic_menu_close_clear_cancel, mContext.getString(R.string.cancel_txt), getActionCancel(stackBuilderActionCancel));
+                        .addAction(R.drawable.ic_human_greeting, mContext.getString(R.string.confirm_txt) ,getActionConfirm(stackBuilderActionConfirm))
+                        .addAction(R.drawable.ic_bell_off, mContext.getString(R.string.cancel_txt), getActionCancel(stackBuilderActionCancel));
 
 
-        Intent resultIntent = new Intent(mContext, MainActivity.class);
-        String action_notification_confirm = mContext.getString(R.string.action_notification_confirm);
-        resultIntent.putExtra(action_notification_confirm, compromisso);
+        Intent resultIntent = new Intent(mContext, ActionNotificationActivity.class);
+        String action_notification_show = mContext.getString(R.string.action_notification_show);
+
+        resultIntent.putExtra(action_notification_show, compromisso);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(ActionNotificationActivity.class);
 
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
@@ -59,20 +58,29 @@ public class NotificationCompromisso {
         return mBuilder;
     }
 
-    protected Intent getActionIntentConfirm(long id) {
-        int idNotification = (int) id;
+    protected Intent getActionIntentConfirm(Compromisso compromisso) {
+        int idNotification = (int) compromisso.getIdentificador();
+
         String action_notification_confirm = mContext.getString(R.string.action_notification_confirm);
+        String action_evento_notification = mContext.getString(R.string.action_evento_notification);
         Intent confirmNotificationIntent = new Intent(mContext, ActionNotificationActivity.class);
+
+        confirmNotificationIntent.putExtra(action_evento_notification, compromisso);
         confirmNotificationIntent.putExtra(action_notification_confirm, action_notification_confirm);
-        confirmNotificationIntent.putExtra(mContext.getString(R.string.id_notification_value), idNotification);
+        confirmNotificationIntent.putExtra(action_notification_confirm, idNotification);
 
         return confirmNotificationIntent;
     }
 
-    protected Intent getActionIntentCancel(long id) {
-        int idNotification = (int) id;
+    protected Intent getActionIntentCancel(Compromisso compromisso) {
+        int idNotification = (int) compromisso.getIdentificador();
+
+        String action_evento_notification = mContext.getString(R.string.action_evento_notification);
+        String id_notification_value = mContext.getString(R.string.id_notification_value);
+
         Intent cancelNotificationIntent = new Intent(mContext, ActionNotificationActivity.class);
-        cancelNotificationIntent.putExtra(mContext.getString(R.string.id_notification_value), idNotification);
+        cancelNotificationIntent.putExtra(action_evento_notification, compromisso);
+        cancelNotificationIntent.putExtra(id_notification_value, idNotification);
 
         return cancelNotificationIntent;
     }
@@ -94,5 +102,4 @@ public class NotificationCompromisso {
                 );
         return actionCancelPendingIntent;
     }
-
 }

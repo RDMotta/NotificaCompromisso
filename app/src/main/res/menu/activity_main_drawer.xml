@@ -2,12 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_today"
-            android:icon="@android:drawable/ic_menu_day"
-            android:title="@string/txt_hoje"
-          />
-        <item
+           <item
             android:id="@+id/nav_refresh"
             android:icon="@android:drawable/ic_popup_sync"
             android:title="@string/txt_atualizar"
