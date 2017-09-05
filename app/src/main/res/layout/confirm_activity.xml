@@ -5,7 +5,7 @@
     android:id="@+id/confirma_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rdm.notificacompromisso.view.ActionNotificationActivity">
+    tools:context="com.rdm.notificacompromisso.app.view.ActionNotificationActivity">
 
     <TextView
         android:id="@+id/textView2"

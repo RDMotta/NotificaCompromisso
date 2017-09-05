@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rdm.notificacompromisso">
+    package="com.rdm.notificacompromisso.app">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -98,7 +98,7 @@
 
         <provider
             android:name=".presenter.db.CompromissosProvider"
-            android:authorities="com.rdm.notificacompromisso.presenter.provider.CompromissosProvider" />
+            android:authorities="com.rdm.notificacompromisso.app.presenter.provider.CompromissosProvider" />
     </application>
 
 </manifest>
